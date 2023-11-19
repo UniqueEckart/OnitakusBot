@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import os
+import os, utils.Logger
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,6 +15,7 @@ class Onitakus(commands.Bot):
     async def setup_hook(self) -> None:
        for file in os.listdir('cogs'):
            if file.endswith('.py'):
+               utils.Logger.debugLog(f"loading Cog: {file[:-3]}")
                await self.load_extension(f'cogs.{file[:-3]}')
 
     async def on_ready(self):

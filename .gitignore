@@ -1,2 +1,5 @@
 .env
+.env.dev
+.env.prod
 /cogs/__pycache__
+/utils/__pycache__
