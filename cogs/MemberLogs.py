@@ -47,7 +47,9 @@ class MemberLogs(commands.Cog):
         await messageEditChannel.send(embed=embed)
 
     @commands.Cog.listener("on_message_delete")
-    async def messageDelete(self, message):
+    async def messageDelete(self, message: discord.Message):
+        if message.channel.id == 943152490898153532:
+            return
         messageDeleteChannel = self.bot.get_channel(int(os.environ.get('MessageLogChannel')))
         currentTime = datetime.date.strftime(datetime.datetime.now(), "%H:%M")
 
