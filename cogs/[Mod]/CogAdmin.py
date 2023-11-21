@@ -9,6 +9,9 @@ class CogAdmin(commands.Cog):
     @app_commands.command(name="reload", description="Hot reload a Cog. Only for Debug!")
     @app_commands.checks.has_permissions(administrator=True)
     async def reload(self, interaction: discord.Interaction, cog: str):
+        if interaction.user.id != 275024450494136321:
+            await interaction.response.send_message("Du hast keine Berechtigung diesen Command zu verwenden!", ephemeral=True)
+            return
         for name, cogObject in self.bot.cogs.items():
             if cog == name:
                 co = str(cogObject.__class__).replace("<class '", "")
@@ -22,6 +25,9 @@ class CogAdmin(commands.Cog):
     @app_commands.command(name="unload", description="Unload a Cog. Only for Debug!")
     @app_commands.checks.has_permissions(administrator=True)
     async def unload(self, interaction: discord.Interaction, cog: str):
+        if interaction.user.id != 275024450494136321:
+            await interaction.response.send_message("Du hast keine Berechtigung diesen Command zu verwenden!", ephemeral=True)
+            return
         for name, cogObject in self.bot.cogs.items():
             if cog == name:
                 co = str(cogObject.__class__).replace("<class '", "")
