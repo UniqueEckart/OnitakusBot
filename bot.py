@@ -13,15 +13,18 @@ class Onitakus(commands.Bot):
         super().__init__(command_prefix="-", intents=intents, application_id=application_id)
 
     async def setup_hook(self) -> None:
-       for file in os.listdir('cogs'):
-           if file.endswith('.py'):
-               utils.Logger.debugLog(f"loading Cog: {file[:-3]}")
-               await self.load_extension(f'cogs.{file[:-3]}')
+       for dirs in os.listdir('cogs'):
+            if os.path.isdir("./cogs/" + dirs) and dirs.startswith("["):
+               for cog in os.listdir("./cogs/" + dirs):
+                    if cog.endswith(".py"):
+                        cog = cog[:-3]
+                        utils.Logger.debugLog(f"loading Cog: {cog} from Category {dirs}")
+                        await self.load_extension(f'cogs.{dirs}.{cog}')
+            else:
+               utils.Logger.warning(f"The Directory {dirs} is not a valid Category!")
 
     async def on_ready(self):
         await self.change_presence(status=discord.Status.online, activity=discord.Game("Onitakus"))
-        #fmt = await self.tree.sync()
-        #print(f"Synced {len(fmt)} Commands.")
         print(f"Logged in as {self.user}")
 
 bot = Onitakus()

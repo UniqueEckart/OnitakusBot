@@ -12,13 +12,12 @@ class MemberLogs(commands.Cog):
     async def member_leave(self, member: discord.Member):
         leave = self.bot.get_channel(int(os.environ.get("LeaveChannel")))
     
-        await leave.send(f"<@{member.id}> hat uns leider verlassen!")
+        await leave.send(f"<@{member.id}>/{member.display_name} hat uns leider verlassen!")
         
     @commands.Cog.listener("on_member_update")
     async def member_update(self, before: discord.Member, after: discord.Member):
         log = self.bot.get_channel(int(os.environ.get('UserLogChannel')))
         base_embed = discord.Embed(color=discord.Colour.red())
-
         if before.nick != after.nick:
             base_embed.title = "Nickname Änderung"
             base_embed.set_author(name=before.global_name, icon_url=before.avatar.url)
@@ -34,7 +33,9 @@ class MemberLogs(commands.Cog):
         await log.send(embed=base_embed)
 
     @commands.Cog.listener("on_message_edit")
-    async def messageEdit(self, before, after):
+    async def messageEdit(self, before: discord.Message, after: discord.Message):
+        if before.author.bot:
+            return
         if before.channel.id == 943152490898153532 or before.channel.id == 995768874660278362:
             return
         messageEditChannel = self.bot.get_channel(int(os.environ.get('MessageLogChannel')))
@@ -50,7 +51,7 @@ class MemberLogs(commands.Cog):
 
     @commands.Cog.listener("on_message_delete")
     async def messageDelete(self, message: discord.Message):
-        if message.channel.id == 943152490898153532 or  message.channel.id == 995768874660278362:
+        if message.channel.id == 943152490898153532 or message.channel.id == 995768874660278362:
             return
         messageDeleteChannel = self.bot.get_channel(int(os.environ.get('MessageLogChannel')))
         currentTime = datetime.date.strftime(datetime.datetime.now(), "%H:%M")
